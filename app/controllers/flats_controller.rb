@@ -5,7 +5,7 @@ class FlatsController < ApplicationController
   # GET /flats.json
   def index
     @flats = Flat.geocoded
-    @markers = @flats.each do|flat|
+    @markers = @flats.map do|flat|
       {
         lat: flat.latitude,
         lng: flat.longitude
@@ -63,6 +63,6 @@ class FlatsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def flat_params
-      params.require(:flat).permit(:name, :address, :latitude, :longtitude)
+      params.require(:flat).permit(:name, :address, :latitude, :longitude)
     end
 end

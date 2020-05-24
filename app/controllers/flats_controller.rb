@@ -5,6 +5,13 @@ class FlatsController < ApplicationController
   # GET /flats.json
   def index
     @flats = Flat.all
+
+    @markers = @flats.each do|flat|
+      {
+        lat: flat.latitude,
+        lng: flat.longitude
+      }
+    end
   end
 
   # GET /flats/1
@@ -25,40 +32,28 @@ class FlatsController < ApplicationController
   # POST /flats.json
   def create
     @flat = Flat.new(flat_params)
-
-    respond_to do |format|
       if @flat.save
-        format.html { redirect_to @flat, notice: 'Flat was successfully created.' }
-        format.json { render :show, status: :created, location: @flat }
+        redirect_to @flat, notice: 'Flat was successfully created.'
       else
-        format.html { render :new }
-        format.json { render json: @flat.errors, status: :unprocessable_entity }
+        render :new
       end
-    end
   end
 
   # PATCH/PUT /flats/1
   # PATCH/PUT /flats/1.json
   def update
-    respond_to do |format|
       if @flat.update(flat_params)
-        format.html { redirect_to @flat, notice: 'Flat was successfully updated.' }
-        format.json { render :show, status: :ok, location: @flat }
+        redirect_to @flat, notice: 'Flat was successfully updated.'
       else
-        format.html { render :edit }
-        format.json { render json: @flat.errors, status: :unprocessable_entity }
+        render :edit
       end
-    end
   end
 
   # DELETE /flats/1
   # DELETE /flats/1.json
   def destroy
     @flat.destroy
-    respond_to do |format|
-      format.html { redirect_to flats_url, notice: 'Flat was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+     redirect_to flats_url, notice: 'Flat was successfully destroyed.'
   end
 
   private
@@ -69,6 +64,6 @@ class FlatsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def flat_params
-      params.require(:flat).permit(:name, :address)
+      params.require(:flat).permit(:name, :address, :latitude, :longtitude)
     end
 end
